@@ -9,6 +9,7 @@
     <type>application</type>
     <target>@APPNAME@</target>
     <prepare>pre-install.xql</prepare>
-    <finish/>
+    <finish>post-install.xql</finish>
+	<permissions user="eebo" password="eebo" group="eebo" mode="rw-rw-r--"/>
     <deployed/>
 </meta>

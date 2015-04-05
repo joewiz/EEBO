@@ -1,8 +1,8 @@
 {
-  "name": "sarit",
+  "name": "eebo",
   "version": "0.0.1",
-  "url":"http://sarit.indology.info/",
-  "description": "SARIT: Search and Retrieval of Indic Texts",
+  "url":"http://existsolutions.com/",
+  "description": "Search the Early English Books Online Corpus",
   "main": "resources/js/app.js",
   "directories": {
     "doc": "doc",
@@ -11,7 +11,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "Joern Turner, Wolfgang Meier, Lars Windauer, Tobias Krebs, Jens Østergaard Petersen",
+  "author": "Wolfgang Meier, Lars Windauer, Tobias Krebs, Jens Østergaard Petersen",
   "license": "MIT",
   "devDependencies": {
     "grunt": "~0.4.4",

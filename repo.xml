@@ -1,18 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <meta xmlns="http://exist-db.org/xquery/repo">
-   <description>SARIT: Search and Retrieval of Indic Texts</description>
-		<author>Joern Turner</author>
-		<author>Wolfgang Meier</author>
-		<author>Lars Windauer</author>
-		<author>Tobias Krebs</author>
-		<author>Jens Østergaard Petersen</author>
-		<website>http://sarit.indology.info/</website>
+    <description>Search the Early English Books Online Corpus</description>
+    <author>Wolfgang Meier, Lars Windauer, Tobias Krebs, Jens Østergaard Petersen</author>
+    <website>http://existsolutions.com/</website>
     <status>alpha</status>
     <license>MIT</license>
     <copyright>true</copyright>
     <type>application</type>
-    <target>sarit</target>
+    <target>eebo</target>
     <prepare>pre-install.xql</prepare>
-    <finish/>
-	  <deployed/>
+    <finish>post-install.xql</finish>
+	<permissions user="eebo" password="eebo" group="eebo" mode="rw-rw-r--"/>
+    <deployed/>
 </meta>

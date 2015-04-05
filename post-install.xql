@@ -1,6 +1,8 @@
 xquery version "3.0";
 
-import module namespace xdb="http://exist-db.org/xquery/xmldb";
+declare namespace repo="http://exist-db.org/xquery/repo";
+
+import module namespace config="http://exist-db.org/apps/appblueprint/config" at "modules/config.xqm";
 
 (: The following external variables are set by the repo:deploy function :)
 
@@ -11,15 +13,11 @@ declare variable $dir external;
 (: the target collection into which the app is deployed :)
 declare variable $target external;
 
-declare variable $local:data-collection := "eebo";
-
-declare variable $local:download-collection := $local:data-collection || "/download";
-
 declare function local:mkcol-recursive($collection, $components) {
     if (exists($components)) then
         let $newColl := concat($collection, "/", $components[1])
         return (
-            xdb:create-collection($collection, $components[1]),
+            xmldb:create-collection($collection, $components[1]),
             local:mkcol-recursive($newColl, subsequence($components, 2))
         )
     else
@@ -31,8 +29,14 @@ declare function local:mkcol($collection, $path) {
     local:mkcol-recursive($collection, tokenize($path, "/"))
 };
 
-(: store the collection configuration :)
-local:mkcol("/db/system/config", $target),
-xdb:store-files-from-pattern(concat("/system/config", $target), $dir, "collection.xconf"),
-local:mkcol("/db/system/config/db/", $local:data-collection),
-xdb:store-files-from-pattern(concat("/system/config/db/", $local:data-collection), $dir, "data.xconf")
+local:mkcol("/db", "eebo"),
+local:mkcol("/db/eebo", "download"),
+local:mkcol("/db/eebo/download", "pdf"),
+sm:chown(xs:anyURI("/db/eebo"), "eebo"),
+sm:chgrp(xs:anyURI("/db/eebo"), "eebo"),
+sm:chown(xs:anyURI("/db/eebo/download"), "eebo"),
+sm:chgrp(xs:anyURI("/db/eebo/download"), "eebo"),
+sm:chown(xs:anyURI("/db/eebo/download/pdf"), "eebo"),
+sm:chgrp(xs:anyURI("/db/eebo/download/pdf"), "eebo"),
+sm:chmod(xs:anyURI($target || "/modules/view.xql"), "rwsr-xr-x"),
+sm:chmod(xs:anyURI($target || "/modules/pdf.xql"), "rwsr-xr-x")

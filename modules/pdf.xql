@@ -11,13 +11,13 @@ declare option output:media-type "application/xml";
 
 import module namespace console="http://exist-db.org/xquery/console" at "java:org.exist.console.xquery.ConsoleModule";
 import module namespace process="http://exist-db.org/xquery/process" at "java:org.exist.xquery.modules.process.ProcessModule";
-import module namespace tei2fo="http://exist-db.org/xquery/app/sarit/tei2fo" at "tei2fo.xql";
+import module namespace pmu="http://www.tei-c.org/tei-simple/xquery/util" at "/db/apps/tei-simple/content/util.xql";
 import module namespace config="http://exist-db.org/apps/appblueprint/config" at "config.xqm";
-
+import module namespace xslfo="http://exist-db.org/xquery/xslfo" at "java:org.exist.xquery.modules.xslfo.XSLFOModule";
 
 declare variable $local:WORKING_DIR := system:get-exist-home() || "/webapp";
 (:  Set to 'ah' for AntennaHouse, 'fop' for Apache fop :)
-declare variable $local:PROCESSOR := "ah";
+declare variable $local:PROCESSOR := "fop";
 
 declare variable $local:CACHE := true();
 
@@ -33,32 +33,38 @@ declare function local:prepare-cache-collection() {
 declare function local:fop($id as xs:string, $fo as element()) {
     let $config :=
     <fop version="1.0">
-      <!-- Strict user configuration -->
-      <strict-configuration>true</strict-configuration>
+        <!-- Strict user configuration -->
+        <strict-configuration>true</strict-configuration>
     
-      <!-- Strict FO validation -->
-      <strict-validation>true</strict-validation>
+        <!-- Strict FO validation -->
+        <strict-validation>true</strict-validation>
     
-      <!-- Base URL for resolving relative URLs -->
-      <base>./</base>
-    
-      <!-- Font Base URL for resolving relative font URLs -->
-      <font-base>file:///d:/Servers/sarit/fonts</font-base>
-      <renderers>
-          <renderer mime="application/pdf">
-            <fonts>
-                <!-- register a particular font -->
-                <font kerning="yes"
-                    metrics-url="siddhanta.xml"
-                    embed-url="siddhanta.ttf">
-                    <font-triplet name="Siddhanta" style="normal" weight="normal"/>
-                </font>
-                <font kerning="yes"
-                    metrics-url="sanskrit2003.xml"
-                    embed-url="Sanskrit2003.ttf">
-                    <font-triplet name="Sanskrit2003" style="normal" weight="normal"/>
-                </font>
-            </fonts>
+        <!-- Font Base URL for resolving relative font URLs -->
+        <font-base>{substring-before(request:get-url(), "/eebo")}/tei-simple/resources/fonts/</font-base>
+        <renderers>
+            <renderer mime="application/pdf">
+                <fonts>
+                    <font kerning="yes"
+                        embed-url="Junicode.ttf"
+                        encoding-mode="single-byte">
+                        <font-triplet name="Junicode" style="normal" weight="normal"/>
+                    </font>
+                    <font kerning="yes"
+                        embed-url="Junicode-Bold.ttf"
+                        encoding-mode="single-byte">
+                        <font-triplet name="Junicode" style="normal" weight="700"/>
+                    </font>
+                    <font kerning="yes"
+                        embed-url="Junicode-Italic.ttf"
+                        encoding-mode="single-byte">
+                        <font-triplet name="Junicode" style="italic" weight="normal"/>
+                    </font>
+                    <font kerning="yes"
+                        embed-url="Junicode-BoldItalic.ttf"
+                        encoding-mode="single-byte">
+                        <font-triplet name="Junicode" style="italic" weight="700"/>
+                    </font>
+                </fonts>
             </renderer>
         </renderers>
     </fop>
@@ -122,19 +128,20 @@ declare function local:get-cached($id as xs:string, $doc as element(tei:TEI)) {
 let $id := request:get-parameter("id", ())
 let $token := request:get-parameter("token", ())
 let $source := request:get-parameter("source", ())
-let $doc := collection($config:remote-data-root)/tei:TEI[@xml:id = $id]
+let $useCache := request:get-parameter("cache", "yes")
+let $doc := doc($config:remote-data-root || "/" || $id || ".xml")/tei:TEI
 let $name := util:document-name($doc)
 return
     if ($doc) then
-        let $cached := local:get-cached($name, $doc)
+        let $cached := if ($useCache = ("yes", "true")) then local:get-cached($name, $doc) else ()
         return (
             response:set-cookie("sarit.token", $token),
             if (not($source) and exists($cached)) then (
                 console:log("sarit", "Reading " || $name || " pdf from cache"),
-                response:stream-binary($cached, "media-type=application/pdf", $name || ".pdf")
+                response:stream-binary($cached, "media-type=application/pdf", $id || ".pdf")
             ) else
                 let $start := util:system-time()
-                let $fo := tei2fo:main($doc)
+                let $fo := pmu:process($config:odd-root || "/teisimple.odd", $doc, $config:odd-root, "fo", "../resources/odd")
                 return (
                     console:log("sarit", "Generated fo for " || $name || " in " || util:system-time() - $start),
                     if ($source) then
@@ -151,7 +158,7 @@ return
                                 case xs:base64Binary return (
                                     let $path := local:cache($name, $output)
                                     return
-                                        response:stream-binary(util:binary-doc($path), "media-type=application/pdf", $name || ".pdf")
+                                        response:stream-binary(util:binary-doc($path), "media-type=application/pdf", $id || ".pdf")
                                 )
                                 default return
                                     $output

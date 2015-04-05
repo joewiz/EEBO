@@ -1,4 +1,4 @@
-@import "font.css";
+@import "../../../../tei-simple/resources/fonts/font.css";
 /* +++++++++++++++ general eXistdb styles ++++++++++++++ */
 /* +++++++++++++++ general eXistdb styles ++++++++++++++ */
 /* +++++++++++++++ general eXistdb styles ++++++++++++++ */
@@ -467,6 +467,7 @@ footer a:hover {
       }
   */
 }
+/* @serifFont: Siddhanta, serif; */
 body a {
   color: #428BCA;
   text-decoration: none;
@@ -474,7 +475,7 @@ body a {
 body .play,
 .sidebar-offcanvas,
 .popover-content {
-  font-family: Siddhanta, serif;
+  font-family: "Junicode", Georgia, "Times New Roman", serif;
   font-size: 16px;
   line-height: 24px;
 }
@@ -511,14 +512,14 @@ h3,
 h4,
 h5,
 h6 {
-  font-family: Siddhanta, serif;
+  font-family: "Junicode", Georgia, "Times New Roman", serif;
   color: #777777;
   letter-spacing: 1.5;
 }
 p,
 li,
 a {
-  font-family: Siddhanta, serif;
+  font-family: "Junicode", Georgia, "Times New Roman", serif;
   font-size: 16px;
   line-height: 24px;
   letter-spacing: normal;
