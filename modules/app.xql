@@ -102,7 +102,7 @@ function app:list-works($node as node(), $model as map(*), $filter as xs:string?
             for $doc in $ordered
             return
                 doc($doc/@uri)/tei:TEI
-        else if ($cached) then
+        else if ($cached and $filter != "") then
             $cached
         else
             collection($config:remote-data-root)/tei:TEI
@@ -384,7 +384,7 @@ declare function app:work-title($node as node(), $model as map(*), $type as xs:s
 };
 
 declare %private function app:work-title($work as element(tei:TEI)?) {
-    let $main-title := $work/*:teiHeader/*:fileDesc/*:titleStmt/*:title[@type eq 'main']/text()
+    let $main-title := $work/tei:teiHeader/tei:fileDesc/tei:titleStmt/tei:title[@type = 'main']/text()
     let $main-title := if ($main-title) then $main-title else $work/tei:teiHeader/tei:fileDesc/tei:titleStmt/tei:title[1]/text()
     return
         $main-title
@@ -409,7 +409,7 @@ declare function app:work-author($node as node(), $model as map(*)) {
     let $work := $model("work")/ancestor-or-self::tei:TEI
     let $work-authors := $work//tei:teiHeader/tei:fileDesc/tei:sourceDesc/tei:biblFull/tei:titleStmt/tei:author
     return 
-        $work-authors
+        string-join($work-authors, "; ")
 };
 
 declare function app:epub-link($node as node(), $model as map(*)) {
@@ -422,8 +422,12 @@ declare function app:pdf-link($node as node(), $model as map(*)) {
     let $file := replace(util:document-name($model("work")), "^(.*?)\..*$", "$1")
     let $uuid := util:uuid()
     return
-        <a class="pdf-link" xmlns="http://www.w3.org/1999/xhtml" 
-            data-token="{$uuid}" href="{$node/@href}{$file}.pdf?token={$uuid}&amp;cache=no">{ $node/node() }</a>
+        element { node-name($node) } {
+            $node/@*,
+            attribute data-token { $uuid },
+            attribute href { $node/@href || $file || ".pdf?token=" || $uuid || "&amp;cache=no" },
+            $node/node()
+        }
 };
 
 declare function app:xml-link($node as node(), $model as map(*)) {
@@ -431,12 +435,19 @@ declare function app:xml-link($node as node(), $model as map(*)) {
     let $eXide-link := $app:EXIDE || "?open=" || $doc-path
     let $rest-link := '/exist/rest' || $doc-path
     return
-        if ($app:EXIDE)
-        then 
-            <a xmlns="http://www.w3.org/1999/xhtml" href="{$eXide-link}" 
-                target="eXide" class="eXide-open" data-exide-open="{$doc-path}">{ $node/node() }</a>
-        else 
-            <a xmlns="http://www.w3.org/1999/xhtml" href="{$rest-link}" target="_blank">{ $node/node() }</a>
+        element { node-name($node) } {
+            if ($app:EXIDE)
+            then (
+                attribute href { $eXide-link },
+                attribute data-exide-open { $doc-path },
+                attribute class { "eXide-open " || $node/@class },
+                attribute target { "eXide" }
+            ) else (
+                attribute href { $rest-link },
+                attribute target { "_blank" }
+            ),
+            $node/node()
+        }
 };
 
 declare function app:copy-params($node as node(), $model as map(*)) {
@@ -584,29 +595,13 @@ function app:view($node as node(), $model as map(*), $id as xs:string, $action a
 };
 
 declare function app:lucene-view($node as node(), $model as map(*), $id as xs:string, $query as item()?, $query-scope as xs:string?, $query-scripts as xs:string) {    
-(:    console:log("sarit", "lucene-view: " || $id),:)
     for $div in $model("work")
     let $div :=
         if ($query) then
             if ($query-scope eq 'narrow') then
                 util:expand((
-                $div[.//tei:p[ft:query(., $query)]],
-                $div[.//tei:head[ft:query(., $query)]],
-                $div[.//tei:lg[ft:query(., $query)]],
-                $div[.//tei:trailer[ft:query(., $query)]],
-                $div[.//tei:note[ft:query(., $query)]],
-                $div[.//tei:list[ft:query(., $query)]],
-                $div[.//tei:l[ft:query(., $query)]],
-                $div[.//tei:quote[ft:query(., $query)]],
-                $div[.//tei:table[ft:query(., $query)]],
-                $div[.//tei:listApp[ft:query(., $query)]],
-                $div[.//tei:listBibl[ft:query(., $query)]],
-                $div[.//tei:cit[ft:query(., $query)]],
-                $div[.//tei:label[ft:query(., $query)]],
-                $div[.//tei:encodingDesc[ft:query(., $query)]],
-                $div[.//tei:fileDesc[ft:query(., $query)]],
-                $div[.//tei:profileDesc[ft:query(., $query)]],
-                $div[.//tei:revisionDesc[ft:query(., $query)]]
+                    $div[./descendant-or-self::tei:div[ft:query(., $query)]],
+                    $div[.//tei:head[ft:query(., $query)]]
                 ),
                 "add-exist-id=all")
             else
@@ -772,7 +767,6 @@ function app:query($node as node()*, $model as map(*), $query as xs:string?, $lu
  : Create a bootstrap pagination element to navigate through the hits.
  :)
 declare
-    %templates:wrap
     %templates:default('key', 'hits')
     %templates:default('start', 1)
     %templates:default("per-page", 10)
@@ -781,60 +775,65 @@ declare
 function app:paginate($node as node(), $model as map(*), $key as xs:string, $start as xs:int, $per-page as xs:int, $min-hits as xs:int,
     $max-pages as xs:int) {
     if ($min-hits < 0 or count($model($key)) >= $min-hits) then
-        let $count := xs:integer(ceiling(count($model($key))) div $per-page) + 1
-        let $middle := ($max-pages + 1) idiv 2
-        return (
-            if ($start = 1) then (
-                <li class="disabled">
-                    <a><i class="glyphicon glyphicon-fast-backward"/></a>
-                </li>,
-                <li class="disabled">
-                    <a><i class="glyphicon glyphicon-backward"/></a>
-                </li>
-            ) else (
-                <li>
-                    <a href="?start=1"><i class="glyphicon glyphicon-fast-backward"/></a>
-                </li>,
-                <li>
-                    <a href="?start={max( ($start - $per-page, 1 ) ) }"><i class="glyphicon glyphicon-backward"/></a>
-                </li>
-            ),
-            let $startPage := xs:integer(ceiling($start div $per-page))
-            let $lowerBound := max(($startPage - ($max-pages idiv 2), 1))
-            let $upperBound := min(($lowerBound + $max-pages - 1, $count))
-            let $lowerBound := max(($upperBound - $max-pages + 1, 1))
-            for $i in $lowerBound to $upperBound
-            return
-                if ($i = ceiling($start div $per-page)) then
-                    <li class="active"><a href="?start={max( (($i - 1) * $per-page + 1, 1) )}">{$i}</a></li>
-                else
-                    <li><a href="?start={max( (($i - 1) * $per-page + 1, 1)) }">{$i}</a></li>,
-            if ($start + $per-page < count($model($key))) then (
-                <li>
-                    <a href="?start={$start + $per-page}"><i class="glyphicon glyphicon-forward"/></a>
-                </li>,
-                <li>
-                    <a href="?start={max( (($count - 1) * $per-page + 1, 1))}"><i class="glyphicon glyphicon-fast-forward"/></a>
-                </li>
-            ) else (
-                <li class="disabled">
-                    <a><i class="glyphicon glyphicon-forward"/></a>
-                </li>,
-                <li>
-                    <a><i class="glyphicon glyphicon-fast-forward"/></a>
-                </li>
+        element { node-name($node) } {
+            $node/@*,
+            let $count := xs:integer(ceiling(count($model($key))) div $per-page) + 1
+            let $middle := ($max-pages + 1) idiv 2
+            return (
+                if ($start = 1) then (
+                    <li class="disabled">
+                        <a><i class="glyphicon glyphicon-fast-backward"/></a>
+                    </li>,
+                    <li class="disabled">
+                        <a><i class="glyphicon glyphicon-backward"/></a>
+                    </li>
+                ) else (
+                    <li>
+                        <a href="?start=1"><i class="glyphicon glyphicon-fast-backward"/></a>
+                    </li>,
+                    <li>
+                        <a href="?start={max( ($start - $per-page, 1 ) ) }"><i class="glyphicon glyphicon-backward"/></a>
+                    </li>
+                ),
+                let $startPage := xs:integer(ceiling($start div $per-page))
+                let $lowerBound := max(($startPage - ($max-pages idiv 2), 1))
+                let $upperBound := min(($lowerBound + $max-pages - 1, $count))
+                let $lowerBound := max(($upperBound - $max-pages + 1, 1))
+                for $i in $lowerBound to $upperBound
+                return
+                    if ($i = ceiling($start div $per-page)) then
+                        <li class="active"><a href="?start={max( (($i - 1) * $per-page + 1, 1) )}">{$i}</a></li>
+                    else
+                        <li><a href="?start={max( (($i - 1) * $per-page + 1, 1)) }">{$i}</a></li>,
+                if ($start + $per-page < count($model($key))) then (
+                    <li>
+                        <a href="?start={$start + $per-page}"><i class="glyphicon glyphicon-forward"/></a>
+                    </li>,
+                    <li>
+                        <a href="?start={max( (($count - 1) * $per-page + 1, 1))}"><i class="glyphicon glyphicon-fast-forward"/></a>
+                    </li>
+                ) else (
+                    <li class="disabled">
+                        <a><i class="glyphicon glyphicon-forward"/></a>
+                    </li>,
+                    <li>
+                        <a><i class="glyphicon glyphicon-fast-forward"/></a>
+                    </li>
+                )
             )
-        ) else
-            ()
+        }
+    else
+        ()
 };
 
 (:~
     Create a span with the number of items in the current search result.
 :)
 declare 
+    %templates:wrap
     %templates:default("key", "hits")
 function app:hit-count($node as node()*, $model as map(*), $key as xs:string) {
-    <span xmlns="http://www.w3.org/1999/xhtml" id="hit-count">{ count($model($key)) }</span>
+    count($model($key))
 };
 
 (:~
@@ -864,20 +863,22 @@ function app:show-hits($node as node()*, $model as map(*), $start as xs:integer,
     let $work-title := app:work-title($work)
     (:the work always has xml:id.:)
     let $work-id := $work/@xml:id/string()
+    let $work-id := if ($work-id) then $work-id else util:document-name($work) || "_1"
     (:pad hit with surrounding siblings:)
-    let $hit-padded := <hit>{($hit/preceding-sibling::*[1], $hit, $hit/following-sibling::*[1])}</hit>
+    let $hit-padded := $hit
+(:    let $hit-padded := <hit>{($hit/preceding-sibling::*[1], $hit, $hit/following-sibling::*[1])}</hit>:)
     let $loc := 
         <tr class="reference">
             <td colspan="3">
                 <span class="number">{$start + $p - 1}</span>
-                <a href="{$work-id}">{$work-title}</a>{if ($div-head) then ', ' else ''}<a href="{$parent-id}.html">{$div-head}</a>
+                <a href="{$work-id}">{$work-title}</a>{if ($div-head) then ' / ' else ''}<a href="{$parent-id}.html">{$div-head}</a>
             </td>
         </tr>
     let $matchId := ($hit/@xml:id, util:node-id($hit))[1]
     let $config := <config width="60" table="yes" link="{$div-id}.html?action=search#{$matchId}"/>
     let $kwic := kwic:summarize($hit-padded, $config)
     return
-        ($loc, $kwic)        
+        ($loc, $kwic)
 };
 
 declare function app:base($node as node(), $model as map(*)) {

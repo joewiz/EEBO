@@ -1,18 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <div xmlns="http://www.w3.org/1999/xhtml" data-template="templates:surround" data-template-with="template.html" data-template-at="content-wrapper">
-    <div class="container">
-        <div class="row" data-template="app:work">
-            <div class="col-md-12">
-                <div id="content">
-                    <div data-template="app:work">
-                        <!--<div class="center">
-                            <a href="." class="nav-link" data-template="app:copy-params">
-                                <i class="glyphicon glyphicon-chevron-up"/> Back to Search and Work
-                                    List </a>
-                        </div>-->
-                        <div data-template="app:header"/>
-                        <h3>Contents</h3>
-                        <div data-template="app:outline" data-template-details="yes"/>
-                    </div>
+    <div class="container" id="content" data-template="app:work">
+        <div class="row">
+            <div class="btn-group">
+                <a class="btn btn-default pdf-link" data-template="app:pdf-link">
+                    <i class="fa fa-file-pdf-o"/>
+                </a>
+                <a class="btn btn-default" data-template="app:xml-link">
+                    <i class="fa fa-file-code-o"/>
+                </a>
+            </div>
+        </div>
+        <div class="row">
+            <div class="teiHeader">
+                <h3>
+                    <a data-template="app:work-title"/>
+                </h3>
+                <p>by <span data-template="app:work-author"/>
+                </p>
+            </div>
+            <h3>Contents</h3>
+            <div data-template="app:outline" data-template-details="yes"/>
+        </div>
+    </div>
+    <div class="modal fade" id="pdf-info">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">
+                        <span class="fa fa-times" aria-hidden="true"/>
+                        <span class="sr-only">Close</span>
+                    </button>
+                    <h4 class="modal-title">Generating PDF</h4>
+                </div>
+                <div class="modal-body">
+                    <p>Generating a PDF may take up to a few minutes. Please wait.</p>
+                    <p>This dialog should close automatically when the download has completed.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">
+                        <i class="glyphicon glyphicon-remove"/> Close</button>
                 </div>
             </div>
         </div>

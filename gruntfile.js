@@ -112,7 +112,7 @@ module.exports = function (grunt) {
                     {expand: true,
                         cwd: './',
                         flatten: true,
-                        src: ['components/font-awesome/fonts/**'],
+                        src: ['components/fontawesome/fonts/**'],
                         dest: 'dist/resources/fonts/',
                         filter: 'isFile'
                     }
@@ -173,6 +173,7 @@ module.exports = function (grunt) {
                     'components/bootstrap/dist/js/bootstrap.min.js',
                     'components/Macaroon/jquery.fs.macaroon.min.js',
                     'components/snap.svg/dist/snap.svg-min.js',
+                    'components/bootstrap3-typeahead/bootstrap3-typeahead.min.js',
                     'resources/js/app.min.js'],
                 // the location of the resulting JS file
                 dest: 'dist/resources/js/app.min.js'
@@ -265,7 +266,7 @@ module.exports = function (grunt) {
         zip: {
             xar: {
                 src: [
-                    'collection.xconf',
+                    '*.xconf',
                     '*.xml',
                     '*.xql',
                     '*.html',
@@ -279,8 +280,9 @@ module.exports = function (grunt) {
                     'components/animate.css/*',
                     'components/bootstrap/dist/**',
                     'components/Macaroon/*',
-                    'components/font-awesome/css/**',
-                    'components/font-awesome/fonts/**',
+                    'components/bootstrap3-typeahead/*',
+                    'components/fontawesome/css/**',
+                    'components/fontawesome/fonts/**',
                     'components/jquery/dist/**',
                     'components/snap.svg/dist/**'
                 ],

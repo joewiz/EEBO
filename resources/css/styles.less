@@ -30,6 +30,15 @@ header,.navbar,footer{
     font-size:1.4em;
   }
 }
+
+.browse {
+    font-size: 1em !important;
+    
+    td:nth-child(2), td:nth-child(3) {
+        font-family: @serifFont;
+    }
+}
+
 .stripe{
   background-color: #F1F1F1;
   margin: 70px 0 20px 0;
@@ -43,16 +52,13 @@ header,.navbar,footer{
 }
 
 h1,h2,h3,h4,h5,h6{
-  font-family: @serifFont;
   color:#777777;
   letter-spacing: 1.5;
 }
 p,li,a{
-  font-family: @serifFont;
-  font-size: 16px;
-  line-height: 24px;
   letter-spacing:normal;
 }
+
 dt{
   font-size: 1.4em;
   margin-top:10px;
@@ -162,7 +168,13 @@ footer{
     border-top: 2px solid #CCC;
 }
 
+.result-count {
+    font-size: .666em;
+    margin-left: 1em;
+}
+
 #results {
+    font-size: 1em;
     table-layout: fixed;
     
     .following, .previous, .hi {
@@ -185,6 +197,20 @@ footer{
         .number {
             margin-right: 1em;
         }
+    }
+}
+
+.contents, .play {
+    font-family: @serifFont;
+    
+    p, li {
+        font-family: @serifFont;
+    }
+}
+
+.play, .teiHeader {
+    h1, h2, h3, h4, h5 {
+        font-family: @serifFont;
     }
 }
 
@@ -251,6 +277,8 @@ footer{
 /*Jens additions*/
 
 .teiHeader {
+    
+    font-family: @serifFont;
 
 li {
     font-size:20px;
@@ -311,7 +339,6 @@ ul.contents {
     
         li {
             list-style-type: none;
-            font-size:12px;
         }
 }
 
@@ -360,11 +387,10 @@ mark, .mark {
     margin-top:1em;
 }
 
-.navigation-top {
+.navigation-top, .navigation-bottom {
     vertical-align:middle;
-}
-.navigation-bottom {
-    vertical-align:middle;
+    
+    font-family: @serifFont;
 }
 
 .work-title {

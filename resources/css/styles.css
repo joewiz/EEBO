@@ -495,6 +495,13 @@ footer img {
 .navbar .container li {
   font-size: 1.4em;
 }
+.browse {
+  font-size: 1em !important;
+}
+.browse td:nth-child(2),
+.browse td:nth-child(3) {
+  font-family: "Junicode", Georgia, "Times New Roman", serif;
+}
 .stripe {
   background-color: #F1F1F1;
   margin: 70px 0 20px 0;
@@ -512,16 +519,12 @@ h3,
 h4,
 h5,
 h6 {
-  font-family: "Junicode", Georgia, "Times New Roman", serif;
   color: #777777;
   letter-spacing: 1.5;
 }
 p,
 li,
 a {
-  font-family: "Junicode", Georgia, "Times New Roman", serif;
-  font-size: 16px;
-  line-height: 24px;
   letter-spacing: normal;
 }
 dt {
@@ -619,7 +622,12 @@ footer p a:visited {
   padding: 10px 10px 10px 0;
   border-top: 2px solid #CCC;
 }
+.result-count {
+  font-size: .666em;
+  margin-left: 1em;
+}
 #results {
+  font-size: 1em;
   table-layout: fixed;
 }
 #results .following,
@@ -644,6 +652,28 @@ footer p a:visited {
 }
 #results .reference .number {
   margin-right: 1em;
+}
+.contents,
+.play {
+  font-family: "Junicode", Georgia, "Times New Roman", serif;
+}
+.contents p,
+.play p,
+.contents li,
+.play li {
+  font-family: "Junicode", Georgia, "Times New Roman", serif;
+}
+.play h1,
+.teiHeader h1,
+.play h2,
+.teiHeader h2,
+.play h3,
+.teiHeader h3,
+.play h4,
+.teiHeader h4,
+.play h5,
+.teiHeader h5 {
+  font-family: "Junicode", Georgia, "Times New Roman", serif;
 }
 /* Styles for the off canvas table of contents */
 #toc-toggle {
@@ -697,6 +727,9 @@ footer p a:visited {
   font-size: 14px;
 }
 /*Jens additions*/
+.teiHeader {
+  font-family: "Junicode", Georgia, "Times New Roman", serif;
+}
 .teiHeader li {
   font-size: 20px;
 }
@@ -764,7 +797,6 @@ ul.contents {
 }
 ul.contents li {
   list-style-type: none;
-  font-size: 12px;
 }
 li.current {
   font-weight: bold;
@@ -802,11 +834,10 @@ mark,
 .content-nav.bottom {
   margin-top: 1em;
 }
-.navigation-top {
-  vertical-align: middle;
-}
+.navigation-top,
 .navigation-bottom {
   vertical-align: middle;
+  font-family: "Junicode", Georgia, "Times New Roman", serif;
 }
 .work-title {
   font-size: 18px;

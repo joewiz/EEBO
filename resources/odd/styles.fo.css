@@ -1,3 +1,9 @@
+@page:head {
+    font-family: "Junicode";
+    margin-bottom: 0.7mm; 
+    text-align-last: justify; 
+    font-size: 10pt;
+}
 .front {
     font-family: "Junicode";
 }
