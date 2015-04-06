@@ -16,8 +16,9 @@ declare function local:index() {
             }
             {
                 for $author in $titleStmt/tei:author
+                let $normalized := replace($author/text(), "^([^,]*,[^,]*),?.*$", "$1")
                 return
-                    <field name="author" store="yes">{$author/text()}</field>
+                    <field name="author" store="yes">{$normalized}</field>
             }
         </doc>
     return

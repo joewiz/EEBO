@@ -694,61 +694,23 @@ function app:query($node as node()*, $model as map(*), $query as xs:string?, $lu
             (:The query passed to a Luecene query in ft:query is an XML element <query> containing one or two <bool>. The <bool> contain the original query and the transliterated query, as indicated by the user in $query-scripts.:)
             let $hits :=
                     (:If the $query-scope is narrow, query the elements immediately below the lowest div in tei:text and the four major element below tei:teiHeader.:)
-                    if ($query-scope eq 'narrow')
-                    then
-                        for $hit in 
-                            (:If both tei-text and tei-header is queried.:)
-                            if (count($tei-target) eq 2)
-                            then 
-                                (
-                                collection($config:remote-data-root)//tei:div[ft:query(., $query)]
-(:                                collection($config:remote-data-root)//tei:head[ft:query(., $query)],:)
-(:                                collection($config:remote-data-root)//tei:l[ft:query(., $query)],:)
-(:                                collection($config:remote-data-root)//tei:item[ft:query(., $query)]:)
-                                )
-                            else
-                                if ($tei-target = 'tei-text')
-                                then
-                                    (
-                                    collection($config:remote-data-root)//tei:div[ft:query(., $query)]
-(:                                    collection($config:remote-data-root)//tei:head[ft:query(., $query)],:)
-(:                                    collection($config:remote-data-root)//tei:l[ft:query(., $query)],:)
-(:                                    collection($config:remote-data-root)//tei:item[ft:query(., $query)]:)
-                                    )
-                                else 
-                                    if ($tei-target = 'tei-header')
-                                    then 
-                                        (
-                                        collection($config:remote-data-root)//tei:encodingDesc[ft:query(., $query)],
-                                        collection($config:remote-data-root)//tei:fileDesc[ft:query(., $query)],
-                                        collection($config:remote-data-root)//tei:profileDesc[ft:query(., $query)],
-                                        collection($config:remote-data-root)//tei:revisionDesc[ft:query(., $query)]
-                                        )
-                                    else ()    
-                        order by ft:score($hit) descending
-                        return $hit
-                    (:If the $query-scope is broad, query the lowest div in tei:text and tei:teiHeader.:)
-                    else
-                        for $hit in 
-                            if (count($tei-target) eq 2)
+                    for $hit in 
+                        (:If both tei-text and tei-header is queried.:)
+                        if (count($tei-target) eq 2)
+                        then
+                            collection($config:remote-data-root)//tei:div[ft:query(., $query)] |
+                            collection($config:remote-data-root)//tei:head[ft:query(., $query)]
+                        else
+                            if ($tei-target = 'tei-text')
                             then
-                                (
-                                collection($config:remote-data-root)//tei:div[not(tei:div)][ft:query(., $query)],
-                                collection($config:remote-data-root)/descendant-or-self::tei:teiHeader[ft:query(., $query)](:NB: Can divs occur in the header? If so, they have to be removed here5:)
-                                )
-                            else
-                                if ($tei-target = 'tei-text')
-                                then
-                                    (
-                                    collection($config:remote-data-root)//tei:div[not(tei:div)][ft:query(., $query)]
-                                    )
-                                else 
-                                    if ($tei-target = 'tei-header')
-                                    then 
-                                        collection($config:remote-data-root)/descendant-or-self::tei:teiHeader[ft:query(., $query)]
-                                    else ()
-                        order by ft:score($hit) descending
-                        return $hit
+                                collection($config:remote-data-root)//tei:div[ft:query(., $query)]
+                            else 
+                                if ($tei-target = 'tei-head')
+                                then 
+                                    collection($config:remote-data-root)//tei:head[ft:query(., $query)]
+                                else ()    
+                    order by ft:score($hit) descending
+                    return $hit
             (:Store the result in the session.:)
             let $store := (
                 session:set-attribute("apps.sarit", $hits),

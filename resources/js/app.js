@@ -78,4 +78,31 @@ $(document).ready(function() {
     });
     
     $(".note1").popover({trigger: "hover", html: "true"});
+    
+    $('.typeahead-meta').typeahead({
+        items: 20,
+        minLength: 4,
+        source: function(query, callback) {
+            var type = $("select[name='browse']").val();
+            $.getJSON("../modules/autocomplete.xql?q=" + query + "&type=" + type, function(data) {
+                callback(data || []);
+            });
+        },
+        updater: function(item) {
+            if (/[\s,]/.test(item)) {
+                return '"' + item + '"';
+            }
+            return item;
+        }
+    });
+    $('.typeahead-search').typeahead({
+        items: 30,
+        minLength: 4,
+        source: function(query, callback) {
+            var type = $("select[name='tei-target']").val();
+            $.getJSON("../modules/autocomplete.xql?q=" + query + "&type=" + type, function(data) {
+                callback(data || []);
+            });
+        }
+    });
 });

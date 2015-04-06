@@ -5,6 +5,8 @@
         <lucene>
             <text qname="tei:div"/>
             <text qname="tei:head"/>
+            <text match="//tei:sourceDesc/tei:biblFull/tei:titleStmt/tei:title"/>
+            <!--text match="//tei:sourceDesc/tei:biblFull/tei:titleStmt/tei:author"/-->
         </lucene>
     </index>
 </collection>
