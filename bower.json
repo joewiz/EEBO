@@ -13,9 +13,11 @@
         "tests"
     ],
     "dependencies": {
-        "bootstrap": ">= 3.1.1",
-        "animate.css": ">= 3.1.0",
-	"Macaroon": ">= 3.0.5"
+       "bootstrap": ">= 3.1.1",
+       "animate.css": ">= 3.1.0",
+	   "Macaroon": ">= 3.0.5",
+       "fontawesome": ">= 4.3.0",
+       "bootstrap3-typeahead": "git@github.com:bassjobsen/Bootstrap-3-Typeahead.git#master"
     }
 
 }

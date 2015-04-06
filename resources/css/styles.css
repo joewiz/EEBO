@@ -675,6 +675,22 @@ footer p a:visited {
 .teiHeader h5 {
   font-family: "Junicode", Georgia, "Times New Roman", serif;
 }
+.play h1,
+.teiHeader h1 {
+  font-size: 3.157em;
+}
+.play h2,
+.teiHeader h2 {
+  font-size: 2.369em;
+}
+.play h3,
+.teiHeader h3 {
+  font-size: 1.777em;
+}
+.play h4,
+.teiHeader h4 {
+  font-size: 1.333em;
+}
 /* Styles for the off canvas table of contents */
 #toc-toggle {
   cursor: pointer;
