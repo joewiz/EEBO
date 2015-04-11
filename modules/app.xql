@@ -140,7 +140,7 @@ function app:work($node as node(), $model as map(*), $id as xs:string) {
 declare %private function app:load($context as node()*, $id as xs:string) {
     (:$context is tei:TEI when loading a document from the TOC and when loading a hit from tei:text; when loading a hit from tei:teiHeader, it is tei:teiHeader.:)
     let $work := if ($context instance of element(tei:teiHeader)) then $context else $context//id($id)
-	return
+    return
         if ($work) then
             $work
         else 
@@ -179,10 +179,10 @@ function app:outline($node as node(), $model as map(*), $full as xs:boolean) {
     let $work := $root/ancestor-or-self::tei:TEI
     return
         if (
-            exists($work/tei:text/tei:front/tei:titlePage) or 
-            exists($work/tei:text/tei:front/tei:div) or 
-            exists($work/tei:text/tei:body/tei:div) or 
-            exists($work/tei:text/tei:back/tei:div)
+            exists($work//tei:text/tei:front/tei:titlePage) or 
+            exists($work//tei:text/tei:front/tei:div) or 
+            exists($work//tei:text/tei:body/tei:div) or 
+            exists($work//tei:text/tei:back/tei:div)
            ) 
         then (
             <ul class="contents">{
@@ -196,35 +196,35 @@ function app:outline($node as node(), $model as map(*), $full as xs:boolean) {
                     default return
                         (:if it is the whole work:)
                         (
-                        if ($work/tei:text/tei:front/tei:titlePage, $work/tei:text/tei:front/tei:div)
+                        if ($work//tei:text/tei:front/tei:titlePage, $work/tei:text/tei:front/tei:div)
                         then
                             <div class="text-front">
                             <h6>Front Matter</h6>
                             {for $div in 
                                 (
-                                $work/tei:text/tei:front/tei:titlePage, 
-                                $work/tei:text/tei:front/tei:div 
+                                $work//tei:text/tei:front/tei:titlePage, 
+                                $work//tei:text/tei:front/tei:div 
                                 )
                             return app:toc-div($div, $long, $position, 'list-item')
                             }</div>
                             else ()
                         ,
                         <div class="text-body">
-                        <h6>{if ($work/tei:text/tei:front/tei:titlePage, $work/tei:text/tei:front/tei:div, $work/tei:text/tei:back/tei:div) then 'Text' else ''}</h6>
+                        <h6>{if ($work//tei:text/tei:front/tei:titlePage, $work//tei:text/tei:front/tei:div, $work//tei:text/tei:back/tei:div) then 'Text' else ''}</h6>
                         {for $div in 
                             (
-                            $work/tei:text/tei:body/tei:div 
+                            $work//tei:text/tei:body/tei:div 
                             )
                         return app:toc-div($div, $long, $position, 'list-item')
                         }</div>
                         ,
-                        if ($work/tei:text/tei:back/tei:div)
+                        if ($work//tei:text/tei:back/tei:div)
                         then
                             <h6 class="text-back">
                             <h6>Back Matter</h6>
                             {for $div in 
                                 (
-                                $work/tei:text/tei:back/tei:div 
+                                $work//tei:text/tei:back/tei:div 
                                 )
                             return app:toc-div($div, $long, $position, 'list-item')
                             }</h6>
@@ -235,7 +235,7 @@ function app:outline($node as node(), $model as map(*), $full as xs:boolean) {
 };
 
 declare function app:generate-toc-from-div($root, $long, $position) {
-	(:if it has divs below itself:)
+    (:if it has divs below itself:)
     <li>{
     if ($root/tei:div) then
         (
