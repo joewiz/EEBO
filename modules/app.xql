@@ -419,7 +419,7 @@ declare function app:epub-link($node as node(), $model as map(*)) {
 };
 
 declare function app:pdf-link($node as node(), $model as map(*)) {
-    let $file := replace(util:document-name($model("work")), "^(.*?)\..*$", "$1")
+    let $file := replace(util:document-name($model("work")), "^(.*?)\.[^\.]*$", "$1")
     let $uuid := util:uuid()
     return
         element { node-name($node) } {
@@ -682,6 +682,7 @@ function app:query($node as node()*, $model as map(*), $query as xs:string?, $lu
         then
             map {
                 "hits" := session:get-attribute("apps.sarit"),
+                "hitCount" := session:get-attribute("apps.sarit.hitCount"),
                 "query" := session:get-attribute("apps.sarit.query"),
                 "scope" := $query-scope (:NB: what about the other arguments?:)
             }
@@ -711,9 +712,12 @@ function app:query($node as node()*, $model as map(*), $query as xs:string?, $lu
                                 else ()    
                     order by ft:score($hit) descending
                     return $hit
+            let $hitCount := count($hits)
+            let $hits := if ($hitCount > 1000) then subsequence($hits, 1, 1000) else $hits
             (:Store the result in the session.:)
             let $store := (
                 session:set-attribute("apps.sarit", $hits),
+                session:set-attribute("apps.sarit.hitCount", $hitCount),
                 session:set-attribute("apps.sarit.query", $query),
                 session:set-attribute("apps.sarit.scope", $query-scope)
                 )
@@ -721,6 +725,7 @@ function app:query($node as node()*, $model as map(*), $query as xs:string?, $lu
                 (: The hits are not returned directly, but processed by the nested templates :)
                 map {
                     "hits" := $hits,
+                    "hitCount" := $hitCount,
                     "query" := $query
                 }
 };
@@ -796,6 +801,18 @@ declare
     %templates:default("key", "hits")
 function app:hit-count($node as node()*, $model as map(*), $key as xs:string) {
     count($model($key))
+};
+
+declare 
+    %templates:wrap
+function app:search-hit-count($node as node()*, $model as map(*)) {
+    let $hitCount := $model("hitCount")
+    let $hits := count($model("hits"))
+    return
+        if ($hitCount > $hits) then
+            $hitCount || " hits. Showing first " || $hits || "."
+        else
+            $hitCount || " hits."
 };
 
 (:~
