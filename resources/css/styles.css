@@ -654,13 +654,16 @@ footer p a:visited {
   margin-right: 1em;
 }
 .contents,
-.play {
+.play,
+.teiHeader {
   font-family: "Junicode", Georgia, "Times New Roman", serif;
 }
 .contents p,
 .play p,
+.teiHeader p,
 .contents li,
-.play li {
+.play li,
+.teiHeader li {
   font-family: "Junicode", Georgia, "Times New Roman", serif;
 }
 .play h1,
@@ -743,14 +746,15 @@ footer p a:visited {
   font-size: 14px;
 }
 /*Jens additions*/
-.teiHeader {
-  font-family: "Junicode", Georgia, "Times New Roman", serif;
-}
-.teiHeader li {
-  font-size: 20px;
-}
 .teiHeader .extHeader button {
   margin: 0 0 1em 0;
+}
+.teiHeader .author1 {
+  font-size: 1.777em;
+  margin-bottom: 1em;
+}
+.teiHeader .extHeader {
+  margin-top: 1em;
 }
 tr.note td ul li {
   font-size: 14px;

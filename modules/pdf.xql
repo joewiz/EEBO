@@ -7,7 +7,7 @@ declare namespace tei="http://www.tei-c.org/ns/1.0";
 
 declare option output:method "xml";
 declare option output:media-type "application/xml";
-
+declare option output:omit-xml-declaration "no";
 
 import module namespace console="http://exist-db.org/xquery/console" at "java:org.exist.console.xquery.ConsoleModule";
 import module namespace process="http://exist-db.org/xquery/process" at "java:org.exist.xquery.modules.process.ProcessModule";
@@ -37,7 +37,7 @@ declare function local:fop($id as xs:string, $fo as element()) {
         <strict-configuration>true</strict-configuration>
     
         <!-- Strict FO validation -->
-        <strict-validation>true</strict-validation>
+        <strict-validation>no</strict-validation>
     
         <!-- Font Base URL for resolving relative font URLs -->
         <font-base>{substring-before(request:get-url(), "/eebo")}/tei-simple/resources/fonts/</font-base>
@@ -130,6 +130,7 @@ let $token := request:get-parameter("token", ())
 let $source := request:get-parameter("source", ())
 let $useCache := request:get-parameter("cache", "yes")
 let $doc := doc($config:remote-data-root || "/" || $id || ".xml")/tei:TEI
+let $log := console:log("Generating PDF for " || $config:remote-data-root || "/" || $id || ".xml")
 let $name := util:document-name($doc)
 return
     if ($doc) then
@@ -141,7 +142,7 @@ return
                 response:stream-binary($cached, "media-type=application/pdf", $id || ".pdf")
             ) else
                 let $start := util:system-time()
-                let $fo := pmu:process($config:odd-root || "/teisimple.odd", $doc, $config:odd-root, "fo", "../resources/odd")
+                let $fo := pmu:process($config:odd-root || "/teisimple.odd", $doc, $config:odd-root, "print", "../resources/odd", ())
                 return (
                     console:log("sarit", "Generated fo for " || $name || " in " || util:system-time() - $start),
                     if ($source) then

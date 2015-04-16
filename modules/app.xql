@@ -24,6 +24,13 @@ declare variable $app:EXIDE :=
     let $path := string-join((request:get-context-path(), request:get-attribute("$exist:prefix"), $appLink, "index.html"), "/")
     return
         replace($path, "/+", "/");
+
+declare variable $app:ext-html := 
+    map {
+        "uri": "http://existsolutions.com/apps/eebo/ext-html",
+        "prefix": "ext",
+        "at": "xmldb:exist://" || $config:app-root || "/modules/ext-html.xql"
+    };
     
 (:~
  : Process navbar links to cope with browsing.
@@ -140,7 +147,7 @@ function app:work($node as node(), $model as map(*), $id as xs:string) {
 declare %private function app:load($context as node()*, $id as xs:string) {
     (:$context is tei:TEI when loading a document from the TOC and when loading a hit from tei:text; when loading a hit from tei:teiHeader, it is tei:teiHeader.:)
     let $work := if ($context instance of element(tei:teiHeader)) then $context else $context//id($id)
-    return
+	return
         if ($work) then
             $work
         else 
@@ -164,7 +171,8 @@ declare %private function app:load($context as node()*, $id as xs:string) {
 };
 
 declare function app:header($node as node(), $model as map(*)) {
-    pmu:process($config:odd-root || "/teisimple.odd", $model("work")/tei:teiHeader, $config:odd-root, "web", "../resources/odd")
+    pmu:process($config:odd, $model("work")/tei:teiHeader, 
+        $config:odd-root, "web", "../resources/odd", $app:ext-html)
 };
 
 (:You can always see three levels: the current level, is siblings, its parent and its children. 
@@ -196,7 +204,7 @@ function app:outline($node as node(), $model as map(*), $full as xs:boolean) {
                     default return
                         (:if it is the whole work:)
                         (
-                        if ($work//tei:text/tei:front/tei:titlePage, $work/tei:text/tei:front/tei:div)
+                        if ($work//tei:text/tei:front/tei:titlePage, $work//tei:text/tei:front/tei:div)
                         then
                             <div class="text-front">
                             <h6>Front Matter</h6>
@@ -235,7 +243,7 @@ function app:outline($node as node(), $model as map(*), $full as xs:boolean) {
 };
 
 declare function app:generate-toc-from-div($root, $long, $position) {
-    (:if it has divs below itself:)
+	(:if it has divs below itself:)
     <li>{
     if ($root/tei:div) then
         (
@@ -329,7 +337,8 @@ declare %private function app:derive-title($div) {
                         else concat('[', $type/string(), ']')
             return $title
         case element(tei:titlePage) return
-            pmu:process($config:odd-root || "/teisimple.odd", $div, $config:odd-root, "web", "../resources/odd")
+            pmu:process($config:odd, $div, $config:odd-root, "web", 
+                "../resources/odd", $app:ext-html)
         default return
             ()
 };
@@ -617,7 +626,8 @@ declare function app:lucene-view($node as node(), $model as map(*), $id as xs:st
     return
         <div xmlns="http://www.w3.org/1999/xhtml" class="play">
         {
-            pmu:process($config:odd-root || "/teisimple.odd", $view, $config:odd-root, "web", "../resources/odd")
+            pmu:process($config:odd, $view, $config:odd-root, "web", 
+                "../resources/odd", $app:ext-html)
         }
         </div>
 };
