@@ -746,12 +746,15 @@ footer p a:visited {
   font-size: 14px;
 }
 /*Jens additions*/
+.teiHeader {
+  margin-bottom: 3em;
+}
 .teiHeader .extHeader button {
   margin: 0 0 1em 0;
 }
 .teiHeader .author1 {
-  font-size: 1.777em;
-  margin-bottom: 1em;
+  font-size: 75%;
+  margin-top: 1em;
 }
 .teiHeader .extHeader {
   margin-top: 1em;
@@ -792,8 +795,7 @@ tr.note td ul li {
 .sourceDesc table td {
   padding: 4px;
 }
-.fileDesc,
-.titleStmt {
+.fileDesc {
   margin-bottom: 3em;
 }
 .titleStmt ul {

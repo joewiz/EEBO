@@ -4,6 +4,10 @@
     text-align-last: justify; 
     font-size: 10pt;
 }
+.teiHeader {
+    font-family: "Junicode";
+    page-break-after: always;
+}
 .front {
     font-family: "Junicode";
 }
@@ -12,4 +16,7 @@
 }
 .floatingText {
     padding: 6pt;
+}
+.title2 {
+    space-after: 0;
 }

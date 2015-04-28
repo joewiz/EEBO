@@ -142,7 +142,7 @@ return
                 response:stream-binary($cached, "media-type=application/pdf", $id || ".pdf")
             ) else
                 let $start := util:system-time()
-                let $fo := pmu:process($config:odd-root || "/teisimple.odd", $doc, $config:odd-root, "print", "../resources/odd", ())
+                let $fo := pmu:process($config:odd, $doc, $config:odd-root, "print", "../resources/odd", ())
                 return (
                     console:log("sarit", "Generated fo for " || $name || " in " || util:system-time() - $start),
                     if ($source) then

@@ -872,7 +872,8 @@ border-bottom: solid 1pt blue;
                             <model behaviour="listItem(.)"/>
                         </elementSpec>
                         <elementSpec mode="change" ident="idno">
-                            <model behaviour="listItem(@type || ': ' || .)"/>
+                            <model output="web" behaviour="cells((@type, .))"/>
+                            <model output="print" behaviour="omit()"/>
                         </elementSpec>
                         <elementSpec mode="change" ident="l">
                             <model behaviour="block(.)" useSourceRendition="true">
@@ -956,7 +957,7 @@ border-bottom: solid 1pt blue;
                             <modelSequence>
                                 <model behaviour="paragraph((publisher,pubPlace))"/>
                                 <model behaviour="heading('Identifiers', '', '')"/>
-                                <model behaviour="list(idno)"/>
+                                <model behaviour="table(idno)"/>
                                 <model behaviour="paragraph(availability)"/>
                             </modelSequence>
                         </elementSpec>
@@ -1110,7 +1111,8 @@ border-bottom: solid 1pt blue;
                                 <model behaviour="block(titleStmt)"/>
                                 <model behaviour="block(seriesStmt)"/>
                                 <model behaviour="paragraph(editionStmt)"/>
-                                <model behaviour="accordion('Extended Header', publicationStmt)"/>
+                                <model output="web" behaviour="collapse('Extended Header', publicationStmt)"/>
+                                <model output="print" behaviour="block(publicationStmt)"/>
                             </modelSequence>
                         </elementSpec>
                         <elementSpec mode="change" ident="profileDesc">
@@ -1150,7 +1152,7 @@ border-bottom: solid 1pt blue;
                         <elementSpec mode="change" ident="title">
                             <modelSequence predicate="parent::titleStmt/parent::fileDesc">
                                 <model predicate="preceding-sibling::title" behaviour="text(' — ')"/>
-                                <model behaviour="heading(.,@type,.)"/>
+                                <model behaviour="inline(.,@type,.)"/>
                             </modelSequence>
                             <model predicate="not(@level) and parent::bibl" behaviour="inline(.)"/>
                             <modelSequence predicate="@level='m' or not(@level)">
@@ -1182,6 +1184,9 @@ border-bottom: solid 1pt blue;
                         </elementSpec>
                         <elementSpec mode="change" ident="titlePart">
                             <model behaviour="block(.)" useSourceRendition="true"/>
+                        </elementSpec>
+                        <elementSpec ident="titleStmt" mode="change">
+                            <model behaviour="heading(., 'titlepage', .)"/>
                         </elementSpec>
                         <elementSpec mode="change" ident="trailer">
                             <model behaviour="block(.)">

@@ -7,7 +7,7 @@ module namespace pmf="http://existsolutions.com/apps/eebo/ext-html";
 
 declare namespace tei="http://www.tei-c.org/ns/1.0";
 
-declare function pmf:accordion($config as map(*), $node as element(), $class as xs:string, $title, $content) {
+declare function pmf:collapse($config as map(*), $node as element(), $class as xs:string, $title, $content) {
     <div class="panel-group" id="{generate-id($node)}" role="tablist">
         <div class="panel panel-default">
             <div class="panel-heading" role="tab">
@@ -20,7 +20,7 @@ declare function pmf:accordion($config as map(*), $node as element(), $class as 
             </div>
             <div id="{translate(generate-id($content), '.', '_')}" class="panel-collapse collapse" role="tabpanel">
                 <div class="panel-body">
-                { pmf:apply-children($config, $node, $content) }
+                { $config?apply-children($config, $node, $content) }
                 </div>
             </div>
         </div>
@@ -31,19 +31,12 @@ declare function pmf:code($config as map(*), $node as element(), $class as xs:st
     <pre class="sourcecode" data-language="{if ($lang) then $lang else 'xquery'}">{$config?apply($config, $content/node())}</pre>
 };
 
-declare %private function pmf:apply-children($config as map(*), $node as element(), $content as item()*) {
-    if ($node/@xml:id) then
-        attribute id { $node/@xml:id }
-    else
-        (),
-    $content ! (
-        typeswitch(.)
-            case element() return
-                if (. is $node) then
-                    $config?apply($config, ./node())
-                else
-                    $config?apply($config, .)
-            default return
-                string(.)
-    )
+declare function pmf:cells($config as map(*), $node as element(), $class as xs:string, $content) {
+    <tr>
+    {
+        for $cell in $content/node() | $content/@*
+        return
+            <td class="{$class}">{$config?apply-children($config, $node, $cell)}</td>
+    }
+    </tr>
 };
