@@ -27,6 +27,19 @@ declare function pmf:collapse($config as map(*), $node as element(), $class as x
     </div>
 };
 
+declare function pmf:break($config as map(*), $node as element(), $class as xs:string, $type as xs:string, $label as item()*, $facs as item()*) {
+    switch($type)
+        case "page" return
+            if ($label) then
+                <span class="{$class}" 
+                    title="{$config?apply-children($config, $node, $facs)}"
+                    data-toggle="tooltip">[p. {$config?apply-children($config, $node, $label)}]</span>
+            else
+                <span class="{$class}">[{$config?apply-children($config, $node, $facs)}]</span>
+        default return
+            <br/>
+};
+
 declare function pmf:code($config as map(*), $node as element(), $class as xs:string, $content as node()*, $lang as item()?) {
     <pre class="sourcecode" data-language="{if ($lang) then $lang else 'xquery'}">{$config?apply($config, $content/node())}</pre>
 };

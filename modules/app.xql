@@ -144,19 +144,15 @@ function app:work($node as node(), $model as map(*), $id as xs:string) {
         map { "work" := $work[1] }
 };
 
-declare %private function app:load($context as node()*, $id as xs:string) {
+declare function app:load($context as node()*, $id as xs:string) {
     (:$context is tei:TEI when loading a document from the TOC and when loading a hit from tei:text; when loading a hit from tei:teiHeader, it is tei:teiHeader.:)
-    let $work := if ($context instance of element(tei:teiHeader)) then $context else $context//id($id)
-	return
-        if ($work) then
-            $work
-        else 
+    
             if (matches($id, "_[p\d\.]+$")) then
             let $analyzed := analyze-string($id, "^(.*)_([^_]+)$")
             let $docName := $analyzed//fn:group[@nr = 1]/text()
             let $doc := doc($config:remote-data-root || "/" || $docName)
             let $nodeId := $analyzed//fn:group[@nr = 2]/string()
-(:            let $log := console:log("sarit", "loading node '" || $nodeId || "' from document " || $config:remote-data-root || "/" || $docName):)
+            let $log := console:log("loading node '" || $nodeId || "' from document " || $config:remote-data-root || "/" || $docName)
             return
                 if (starts-with($nodeId, "p")) then
                     let $page := number(substring-after($nodeId, "p"))
@@ -165,7 +161,7 @@ declare %private function app:load($context as node()*, $id as xs:string) {
                 else
                     util:node-by-id($doc, $nodeId)
         else (
-            console:log("sarit", "Loading " || $config:remote-data-root || "/" || $id),
+            console:log("Loading " || $config:remote-data-root || "/" || $id),
             doc($config:remote-data-root || "/" || $id)/tei:TEI
         )
 };
@@ -401,6 +397,12 @@ declare %private function app:work-title($work as element(tei:TEI)?) {
 
 declare 
     %templates:wrap
+function app:work-edition($node as node(), $model as map(*)) {
+    $model("work")/ancestor-or-self::tei:TEI/tei:teiHeader/tei:fileDesc/tei:editionStmt/tei:edition/tei:date/text()
+};
+
+declare 
+    %templates:wrap
 function app:checkbox($node as node(), $model as map(*), $target-texts as xs:string*) {
     let $id := $model("work")/@xml:id/string()
     return (
@@ -422,9 +424,13 @@ declare function app:work-author($node as node(), $model as map(*)) {
 };
 
 declare function app:epub-link($node as node(), $model as map(*)) {
-    let $id := $model("work")/@xml:id/string()
+    let $file := replace(util:document-name($model("work")), "^(.*?)\.[^\.]*$", "$1")
     return
-        <a xmlns="http://www.w3.org/1999/xhtml" href="{$node/@href}{$id}.epub">{ $node/node() }</a>
+        element { node-name($node) } {
+            $node/@* except $node/@href,
+            attribute href { $node/@href || $file || ".epub" },
+            $node/node()
+        }
 };
 
 declare function app:pdf-link($node as node(), $model as map(*)) {
@@ -445,6 +451,7 @@ declare function app:xml-link($node as node(), $model as map(*)) {
     let $rest-link := '/exist/rest' || $doc-path
     return
         element { node-name($node) } {
+            $node/@* except ($node/@href, $node/@class),
             if ($app:EXIDE)
             then (
                 attribute href { $eXide-link },
@@ -512,7 +519,7 @@ function app:navigation($node as node(), $model as map(*)) {
         }
 };
 
-declare %private function app:get-next($div as element()) {
+declare function app:get-next($div as element()) {
     if ($div/tei:div) then
         if (count(($div/tei:div[1])/preceding-sibling::*) < 5) then
             app:get-next($div/tei:div[1])
@@ -522,7 +529,7 @@ declare %private function app:get-next($div as element()) {
         $div/following::tei:div[1]
 };
 
-declare %private function app:get-previous($div as element(tei:div)?) {
+declare function app:get-previous($div as element(tei:div)?) {
     if (empty($div)) then
         ()
     else
@@ -583,7 +590,7 @@ declare function app:navigation-link($node as node(), $model as map(*), $directi
             $node/node()
         }
     else
-        '&#xA0;' (:hack to keep "Next" from dropping into the hr when there is no "Previous":) 
+        <a href="#" style="visibility: hidden;">{$node/@class, $node/node()}</a>
 };
 
 declare 
@@ -624,10 +631,15 @@ declare function app:lucene-view($node as node(), $model as map(*), $id as xs:st
             $div
     let $view := app:get-content($div[1])
     return
-        <div xmlns="http://www.w3.org/1999/xhtml" class="play">
+        app:process-content($view)
+};
+
+declare function app:process-content($view) {
+	let $html := pmu:process($config:odd, $view, $config:odd-root, "web", "../resources/odd", $app:ext-html)
+    return
+        <div xmlns="http://www.w3.org/1999/xhtml" class="play {if ($html//*[@class = ('margin-note', 'pb2')]) then 'margin-right' else ()}">
         {
-            pmu:process($config:odd, $view, $config:odd-root, "web", 
-                "../resources/odd", $app:ext-html)
+            $html
         }
         </div>
 };

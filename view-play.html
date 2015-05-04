@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <div xmlns="http://www.w3.org/1999/xhtml" data-template="templates:surround" data-template-with="template.html" data-template-at="content-wrapper">
     <div class="container">
         <div class="row row-offcanvas row-offcanvas-left" data-template="app:work">
@@ -8,28 +9,45 @@
                 </div>
             </div>
             <div class="col-md-12">
-                <div id="content">
-                    <div data-template="app:navigation" class="content-nav top">
-                        <h5 class="navigation-top">
-                            <a data-template="app:navigation-title"/>
-                        </h5>
-                        <!--div data-template="app:breadcrumbs" class="breadcrumb"/-->
-                        <a data-template="app:navigation-link" data-template-direction="previous" class="previous">
-                            <i class="glyphicon glyphicon-chevron-left"/> Previous</a>
-                        <a data-template="app:navigation-link" data-template-direction="next" class="next">
-                            Next <i class="glyphicon glyphicon-chevron-right"/>
+                <div class="row toolbar">
+                    <div class="btn-group">
+                        <a class="btn btn-default pdf-link" data-template="app:pdf-link">
+                            <i class="fa fa-file-pdf-o"/> PDF
+                        </a>
+                        <a class="btn btn-default" data-template="app:epub-link" title="Download as epub ebook">
+                            <i class="fa fa-book"/> ePUB
+                        </a>
+                        <a class="btn btn-default" data-template="app:xml-link">
+                            <i class="fa fa-file-code-o"/> XML
                         </a>
                     </div>
-                    <div data-template="app:view"/>
-                    <div data-template="app:navigation" class="content-nav bottom">
-                        <a data-template="app:navigation-link" data-template-direction="previous" class="previous">
-                            <i class="glyphicon glyphicon-chevron-left"/> Previous</a>
-                        <a data-template="app:navigation-link" data-template-direction="next" class="next">
-                            Next <i class="glyphicon glyphicon-chevron-right"/>
-                        </a>
-                        <h5 class="navigation-bottom">
-                            <a data-template="app:navigation-title"/>
-                        </h5>
+                </div>
+                <div class="row">
+                    <div id="content">
+                        <div data-template="app:navigation" class="content-nav top">
+                            <h5 class="navigation-top">
+                                <a data-template="app:navigation-title"/>
+                            </h5>
+                            <!--div data-template="app:breadcrumbs" class="breadcrumb"/-->
+                            <a data-template="app:navigation-link" data-template-direction="previous" class="previous">
+                                <i class="glyphicon glyphicon-chevron-left"/> Previous</a>
+                            <a data-template="app:navigation-link" data-template-direction="next" class="next">
+                                Next <i class="glyphicon glyphicon-chevron-right"/>
+                            </a>
+                        </div>
+                        <div id="content-container">
+                            <div data-template="app:view"/>
+                        </div>
+                        <div data-template="app:navigation" class="content-nav bottom">
+                            <a data-template="app:navigation-link" data-template-direction="previous" class="previous">
+                                <i class="glyphicon glyphicon-chevron-left"/> Previous</a>
+                            <a data-template="app:navigation-link" data-template-direction="next" class="next">
+                                Next <i class="glyphicon glyphicon-chevron-right"/>
+                            </a>
+                            <h5 class="navigation-bottom">
+                                <a data-template="app:navigation-title"/>
+                            </h5>
+                        </div>
                     </div>
                 </div>
             </div>

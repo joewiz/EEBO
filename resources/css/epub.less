@@ -1,145 +1,72 @@
+@serifFont: "Junicode", Georgia, "Times New Roman", serif;
+
 @font-face {
-  font-family: Siddhanta;
-  font-style:   normal;
-  font-weight:  400;
-  src: url("Fonts/siddhanta.otf");
+  src: url('Fonts/Junicode.ttf')  format('truetype');
 }
 
-@page {
-    margin-top: 1em;
-    margin-bottom: 1em;
-    margin-left: 1em;
-    margin-right: 0;
+@font-face {
+  src: url('Fonts/Junicode-Bold.ttf')  format('truetype');
 }
 
-@serifFont: Siddhanta, serif;
+@font-face {
+  src: url('Fonts/Junicode-Italic.ttf')  format('truetype');
+}
 
-body, div, span, p, h1, h2, h3, h4, h5, ol, ul, li {
-    margin: 0;
-    padding: 0;
+@font-face {
+  src: url('Fonts/Junicode-BoldItalic.ttf')  format('truetype');
 }
 
 body {
-    text-align: left;
-    font-size: 1em;
-    line-height: 1.4em;
     font-family: @serifFont;
-    padding-right: 0.5em;
-    -epub-hyphens: none;
-    -webkit-hyphens: none;
-    -moz-hyphens: none;
-    hyphens: none;
 }
 
-h1, h2, h3, h4, h5, h6 {
-    font-family: @serifFont;
-    color: #777777;
-    line-height: 1.5em;
-    margin: 2.55em 0 2.55em 0;
+p, li {
+    orphans: 2;
+    widows: 2;
 }
 
 h1 {
-    font-size: 1.8em;
+  font-size: 2.84em;
 }
-
 h2 {
-    font-size: 1.5em;
-    font-weight: normal;
-    margin: 1.8em 0 1.4em;
-    text-align: center;
+  font-size: 2.13em;
 }
-
 h3 {
-    font-size: 1.2em;
+  font-size: 1.6em;
+}
+h4 {
+  font-size: 1.2em;
 }
 
-ul {
-    list-style: none;
-    text-align: left;
+.note {
+    font-size: x-small;
+    vertical-align: super;
 }
 
-.teiHeader {
-
-  li {
-    font-size: 1.8em;
-  }
-  
-  .extHeader button {
-      margin: 0 0 1em 0;
-  }
+.note-number {
+    font-size: x-small;
+    width: 10%;
+    vertical-align: top;
 }
 
-tr.note td ul li {
-    font-size: 0.8em;
-}
-    
-.copyright-notice, .revisionDesc, .notesStmt, .sourceDesc, .encodingDesc {
-
-  p, li, td, .note, .bibl {
-    font-size: 0.8em;
-    font-family:@serifFont;
-  }
+.margin-note {
+    background: #F8F8FF;
+    font-size: small;
 }
 
-.sourceDesc {
-    table {
-    font-family:@serifFont;
-    margin-top:10px;
-  td {
-    padding:4px;
-  }
-  
-  }
+.margin-note:before {
+    content: " [";
 }
 
-.notesStmt {
-    font-family:@serifFont;
+.margin-note:after {
+    content: "] ";
 }
 
-.fileDesc, .titleStmt {
-    margin-bottom:3em;
-}
-
-.titleStmt {
-    ul {
-        margin-top:2em;
-    }
-    .indent {
-        padding-left:30px;
-        margin-top:10px;
-    }
-}
-.sourceDesc {
-    td {
-        vertical-align:top;
-    }
-}
-
-.p-indent {
-    text-indent:1.7em;
-}
-
-.trailer {
-    font-size:18px;
-    text-align:center;
-}
-
-.title-italic {
-    font-style: italic;
-}
- 
-.text-front {
-    margin-bottom: 1em;
-}
-
-.text-back {
-    margin-top:1em;
-}
-
-.titlePage {
-    margin-bottom:1em;
-}
-
-.work-title {
-    font-size: 1.8em;
+.pb, .pb2 {
+    font-size: xx-small;
+    color: #c0c0c0;
+    vertical-align: super;
+    display: inline;
+    float: inherit;
+    margin: 0;
 }

@@ -34,8 +34,12 @@ header,.navbar,footer{
 .browse {
     font-size: 1em !important;
     
-    td:nth-child(2), td:nth-child(3) {
+    td:nth-child(2), td:nth-child(3), td:nth-child(4) {
         font-family: @serifFont;
+    }
+    td:nth-child(5) {
+        width: 160px;
+        text-align: right;
     }
 }
 
@@ -146,6 +150,16 @@ footer{
   }
 }
 
+.toolbar {
+    margin-bottom: 10px;
+}
+
+#content-container {
+  -webkit-animation-duration: 400ms;
+  -moz-animation-duration: 400ms;
+  animation-duration: 400ms;
+}
+
 .content-nav {
     h5 {
         text-align: center;
@@ -216,6 +230,11 @@ footer{
     h2 { font-size: 2.369em; }
     h3 { font-size: 1.777em; }
     h4 { font-size: 1.333em; }
+}
+
+.margin-right {
+    margin-right: 130px;
+    position: relative;
 }
 
 /* Styles for the off canvas table of contents */
@@ -380,6 +399,19 @@ li.current {
     margin-bottom:1em;
 }
 
+.margin-note {
+    background: #F8F8FF;
+    display: block;
+    font-size: small;
+    margin-right: -130px;
+    padding: 5px;
+    position: absolute;
+    right: 0;
+    top: auto;
+    width: 120px;
+    overflow: visible;
+}
+
 mark, .mark {
     background-color: #d0dde8;
     padding-bottom: 0.1em;
@@ -441,18 +473,18 @@ mark, .mark {
     }
 }
 
-.pb {
-  display:block;
-  float:right;
-  clear:right;
-  margin-right:10px;
-  font-size:10pt;
-  font-family: serif;
-  text-align:right;
-  background:#eeeeee;
-  border-radius:5px;
-  padding:5px;
-    
+.pb, .pb2 {
+    background: #eeeeee;
+    display: block;
+    text-align: center;
+    font-size: small;
+    margin-right: -130px;
+    padding: 5px;
+    position: absolute;
+    right: 0;
+    top: auto;
+    width: 120px;
+    overflow: visible;
 }
 
 section {

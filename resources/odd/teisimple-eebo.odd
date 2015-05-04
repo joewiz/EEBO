@@ -786,8 +786,6 @@
                             <model behaviour="inline(.)">
                                 <rendition>
 display: block;
-border-top: solid 1pt blue;
-border-bottom: solid 1pt blue;
 		</rendition>
                             </model>
                         </elementSpec>
@@ -795,6 +793,7 @@ border-bottom: solid 1pt blue;
                             <model behaviour="block(.)">
                                 <rendition>
 	  margin: 6pt;
+	  padding: 4pt;
 	  border: solid black 1pt;
 	</rendition>
                             </model>
@@ -936,16 +935,11 @@ border-bottom: solid 1pt blue;
                                     <report xmlns="http://purl.oclc.org/dsdl/schematron" test="parent::*/text() and not           (preceding-sibling::text() and           following-sibling::text())">please make sure pb elements are not at the start or end of mixed content </report>
                                 </constraint>
                             </constraintSpec>
-                            <model behaviour="break('page',(concat(if(@n) then     concat(@n,' ') else '',if(@facs) then     concat('@',@facs) else '')))" useSourceRendition="true">
-                                <rendition>
-	  display: block;
-	  margin-left: 4pt;
-	  color: grey;
-	  float: right;
-	</rendition>
-                                <rendition scope="before">content: '[Page ';</rendition>
+                            <model output="print" behaviour="break('page',(concat(if(@n) then     concat(@n,' ') else '',if(@facs) then     concat('@',@facs) else '')))" useSourceRendition="true">
+                                <rendition scope="before">content: '[p. ';</rendition>
                                 <rendition scope="after">content: ']';</rendition>
                             </model>
+                            <model output="web" behaviour="break('page', @n, @facs)"/>
                         </elementSpec>
                         <elementSpec mode="change" ident="pc">
                             <model behaviour="inline(.)"/>

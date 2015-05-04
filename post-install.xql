@@ -39,4 +39,5 @@ sm:chgrp(xs:anyURI("/db/eebo/download"), "eebo"),
 sm:chown(xs:anyURI("/db/eebo/download/pdf"), "eebo"),
 sm:chgrp(xs:anyURI("/db/eebo/download/pdf"), "eebo"),
 sm:chmod(xs:anyURI($target || "/modules/view.xql"), "rwsr-xr-x"),
-sm:chmod(xs:anyURI($target || "/modules/pdf.xql"), "rwsr-xr-x")
+sm:chmod(xs:anyURI($target || "/modules/pdf.xql"), "rwsr-xr-x"),
+sm:chmod(xs:anyURI($target || "/modules/get-epub.xql"), "rwsr-xr-x")

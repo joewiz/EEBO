@@ -15,6 +15,8 @@ let $items :=
         switch ($type)
             case "author" return
                 distinct-values(ft:search($config:remote-data-root, "author:" || $q || "*", "author")//field)
+            case "file" return
+                distinct-values(ft:search($config:remote-data-root, "file:" || $q || "*", "file")//field)
             case "tei-text" return
                 collection($config:remote-data-root)/util:index-keys-by-qname(xs:QName("tei:div"), $q, 
                     function($key, $count) {

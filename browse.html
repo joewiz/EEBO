@@ -8,6 +8,7 @@
                         <select name="browse" class="form-control" data-template="templates:form-control">
                             <option value="author">Author</option>
                             <option value="title">Title</option>
+                            <option value="file">Filename</option>
                         </select>
                     </div>
                     <div class="form-group">
@@ -42,7 +43,7 @@
                             <input type="hidden" name="field" value="text"/>
                         </div>
                     </div>
-                    <div id="mode-selection" class="form-group" data-toggle="tooltip" data-placement="left" title="Use Which Search Mode?" style="display: none;">
+                    <div id="mode-selection" class="form-group" data-toggle="tooltip" data-placement="left" title="Use Which Search Mode?">
                         <div class="col-md-12 col-xs-12">
                             <select name="lucene-query-mode" class="form-control" data-template="templates:form-control">
                                 <option value="any">Any Search Term</option>
@@ -85,8 +86,8 @@
                             <th/>
                             <th>Title</th>
                             <th>Author</th>
-                            <th>Download</th>
-                            <th>Open</th>
+                            <th>Edition</th>
+                            <th/>
                         </tr>
                     </thead>
                     <tbody>
@@ -100,15 +101,19 @@
                             <td>
                                 <a href="" data-template="app:work-author"/>
                             </td>
+                            <td data-template="app:work-edition"/>
                             <td>
-                                <a class="btn btn-default pdf-link" data-template="app:pdf-link">
-                                    <i class="fa fa-file-pdf-o"/>
-                                </a>
-                            </td>
-                            <td>
-                                <a class="btn btn-default" data-template="app:xml-link">
-                                    <i class="fa fa-file-code-o"/>
-                                </a>
+                                <div class="btn-group">
+                                    <a class="btn btn-default pdf-link" data-template="app:pdf-link" title="Download as PDF">
+                                        <i class="fa fa-file-pdf-o"/>
+                                    </a>
+                                    <a class="btn btn-default" data-template="app:epub-link" title="Download as epub ebook">
+                                        <i class="fa fa-book"/>
+                                    </a>
+                                    <a class="btn btn-default" data-template="app:xml-link" title="View TEI XML">
+                                        <i class="fa fa-file-code-o"/>
+                                    </a>
+                                </div>
                             </td>
                         </tr>
                     </tbody>

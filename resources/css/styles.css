@@ -499,8 +499,13 @@ footer img {
   font-size: 1em !important;
 }
 .browse td:nth-child(2),
-.browse td:nth-child(3) {
+.browse td:nth-child(3),
+.browse td:nth-child(4) {
   font-family: "Junicode", Georgia, "Times New Roman", serif;
+}
+.browse td:nth-child(5) {
+  width: 160px;
+  text-align: right;
 }
 .stripe {
   background-color: #F1F1F1;
@@ -605,6 +610,14 @@ footer p a:visited {
 .help thead td {
   font-weight: 700;
 }
+.toolbar {
+  margin-bottom: 10px;
+}
+#content-container {
+  -webkit-animation-duration: 400ms;
+  -moz-animation-duration: 400ms;
+  animation-duration: 400ms;
+}
 .content-nav h5 {
   text-align: center;
   padding: 0;
@@ -693,6 +706,10 @@ footer p a:visited {
 .play h4,
 .teiHeader h4 {
   font-size: 1.333em;
+}
+.margin-right {
+  margin-right: 130px;
+  position: relative;
 }
 /* Styles for the off canvas table of contents */
 #toc-toggle {
@@ -842,6 +859,18 @@ li.current {
 .titlePage {
   margin-bottom: 1em;
 }
+.margin-note {
+  background: #F8F8FF;
+  display: block;
+  font-size: small;
+  margin-right: -130px;
+  padding: 5px;
+  position: absolute;
+  right: 0;
+  top: auto;
+  width: 120px;
+  overflow: visible;
+}
 mark,
 .mark {
   background-color: #d0dde8;
@@ -890,17 +919,19 @@ mark,
   vertical-align: middle;
   margin-right: 18px;
 }
-.pb {
-  display: block;
-  float: right;
-  clear: right;
-  margin-right: 10px;
-  font-size: 10pt;
-  font-family: serif;
-  text-align: right;
+.pb,
+.pb2 {
   background: #eeeeee;
-  border-radius: 5px;
+  display: block;
+  text-align: center;
+  font-size: small;
+  margin-right: -130px;
   padding: 5px;
+  position: absolute;
+  right: 0;
+  top: auto;
+  width: 120px;
+  overflow: visible;
 }
 section {
   margin-top: 0;

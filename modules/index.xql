@@ -20,6 +20,8 @@ declare function local:index() {
                 return
                     <field name="author" store="yes">{$normalized}</field>
             }
+            <field name="year" store="yes">{$doc/tei:teiHeader/tei:fileDesc/tei:editionStmt/tei:edition/tei:date/text()}</field>
+            <field name="file" store="yes">{substring-before(util:document-name($doc), ".xml")}</field>
         </doc>
     return
         ft:index(document-uri(root($doc)), $index)
