@@ -104,10 +104,13 @@
                             <td data-template="app:work-edition"/>
                             <td>
                                 <div class="btn-group">
-                                    <a class="btn btn-default pdf-link" data-template="app:pdf-link" title="Download as PDF">
+                                    <a class="btn btn-default download-link" data-template="app:download-link" data-template-type="pdf" title="Download as PDF">
                                         <i class="fa fa-file-pdf-o"/>
                                     </a>
-                                    <a class="btn btn-default" data-template="app:epub-link" title="Download as epub ebook">
+                                    <a class="btn btn-default download-link" data-template="app:download-link" data-template-type="tex" title="Download as LaTeX PDF">
+                                        <i class="fa fa-leanpub"/>
+                                    </a>
+                                    <a class="btn btn-default download-link" data-template="app:download-link" data-template-type="epub" title="Download as epub ebook">
                                         <i class="fa fa-book"/>
                                     </a>
                                     <a class="btn btn-default" data-template="app:xml-link" title="View TEI XML">
@@ -120,26 +123,5 @@
                 </table>
             </div>
         </form>
-    </div>
-    <div class="modal fade" id="pdf-info">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">
-                        <span class="fa fa-times" aria-hidden="true"/>
-                        <span class="sr-only">Close</span>
-                    </button>
-                    <h4 class="modal-title">Generating PDF</h4>
-                </div>
-                <div class="modal-body">
-                    <p>Generating a PDF may take up to a few minutes. Please wait.</p>
-                    <p>This dialog should close automatically when the download has completed.</p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">
-                        <i class="glyphicon glyphicon-remove"/> Close</button>
-                </div>
-            </div>
-        </div>
     </div>
 </div>

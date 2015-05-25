@@ -38,7 +38,7 @@ header,.navbar,footer{
         font-family: @serifFont;
     }
     td:nth-child(5) {
-        width: 160px;
+        width: 180px;
         text-align: right;
     }
 }
@@ -158,6 +158,7 @@ footer{
   -webkit-animation-duration: 400ms;
   -moz-animation-duration: 400ms;
   animation-duration: 400ms;
+  overflow:auto;
 }
 
 .content-nav {
@@ -214,7 +215,7 @@ footer{
     }
 }
 
-.contents, .play, .teiHeader {
+.contents, .play, .teiHeader, .teiHeader3 {
     font-family: @serifFont;
     
     p, li {
@@ -222,18 +223,19 @@ footer{
     }
 }
 
-.play, .teiHeader {
+.play, .teiHeader, .teiHeader3 {
     h1, h2, h3, h4, h5 {
         font-family: @serifFont;
+        line-height: 1.2em;
     }
-    h1 { font-size: 3.157em; }
-    h2 { font-size: 2.369em; }
-    h3 { font-size: 1.777em; }
-    h4 { font-size: 1.333em; }
+    h1 { font-size: 2.441em; }
+    h2 { font-size: 1.953em; }
+    h3 { font-size: 1.563em; }
+    h4 { font-size: 1.25em; }
 }
 
 .margin-right {
-    margin-right: 130px;
+    margin-right: 200px;
     position: relative;
 }
 
@@ -399,19 +401,6 @@ li.current {
     margin-bottom:1em;
 }
 
-.margin-note {
-    background: #F8F8FF;
-    display: block;
-    font-size: small;
-    margin-right: -130px;
-    padding: 5px;
-    position: absolute;
-    right: 0;
-    top: auto;
-    width: 120px;
-    overflow: visible;
-}
-
 mark, .mark {
     background-color: #d0dde8;
     padding-bottom: 0.1em;
@@ -473,18 +462,47 @@ mark, .mark {
     }
 }
 
-.pb, .pb2 {
-    background: #eeeeee;
+.margin-note {
+    background: #F8F8FF;
+    /*border: 1px solid #CACACA;*/
     display: block;
-    text-align: center;
     font-size: small;
-    margin-right: -130px;
+    margin-right: -200px;
+    margin-bottom: 5px;
     padding: 5px;
-    position: absolute;
-    right: 0;
-    top: auto;
-    width: 120px;
-    overflow: visible;
+    float: right;
+    clear: both;
+    /* position: absolute;*/
+    /*right: 0;*/
+    /*top: auto;*/
+    width: 190px;
+    
+    .n {
+        color: #777;
+    }
+}
+.margin-note-ref {
+    font-size: small;
+    vertical-align: super;
+    color: #777;
+    margin-right: 4px;
+}
+
+.pb, .pb2 {
+    /*background: #eeeeee;*/
+    /*display: block;*/
+    /*text-align: center;*/
+    font-size: small;
+    float: none !important;
+    display: inline !important;
+    margin: 0 !important;
+    /*margin-right: -200px;*/
+    /*padding: 5px;*/
+    /*position: absolute;*/
+    /*right: 0;*/
+    /*top: auto;*/
+    /*width: 190px;*/
+    /*overflow: visible;*/
 }
 
 section {

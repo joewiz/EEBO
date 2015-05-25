@@ -504,7 +504,7 @@ footer img {
   font-family: "Junicode", Georgia, "Times New Roman", serif;
 }
 .browse td:nth-child(5) {
-  width: 160px;
+  width: 180px;
   text-align: right;
 }
 .stripe {
@@ -617,6 +617,7 @@ footer p a:visited {
   -webkit-animation-duration: 400ms;
   -moz-animation-duration: 400ms;
   animation-duration: 400ms;
+  overflow: auto;
 }
 .content-nav h5 {
   text-align: center;
@@ -668,47 +669,60 @@ footer p a:visited {
 }
 .contents,
 .play,
-.teiHeader {
+.teiHeader,
+.teiHeader3 {
   font-family: "Junicode", Georgia, "Times New Roman", serif;
 }
 .contents p,
 .play p,
 .teiHeader p,
+.teiHeader3 p,
 .contents li,
 .play li,
-.teiHeader li {
+.teiHeader li,
+.teiHeader3 li {
   font-family: "Junicode", Georgia, "Times New Roman", serif;
 }
 .play h1,
 .teiHeader h1,
+.teiHeader3 h1,
 .play h2,
 .teiHeader h2,
+.teiHeader3 h2,
 .play h3,
 .teiHeader h3,
+.teiHeader3 h3,
 .play h4,
 .teiHeader h4,
+.teiHeader3 h4,
 .play h5,
-.teiHeader h5 {
+.teiHeader h5,
+.teiHeader3 h5 {
   font-family: "Junicode", Georgia, "Times New Roman", serif;
+  line-height: 1.2em;
 }
 .play h1,
-.teiHeader h1 {
-  font-size: 3.157em;
+.teiHeader h1,
+.teiHeader3 h1 {
+  font-size: 2.441em;
 }
 .play h2,
-.teiHeader h2 {
-  font-size: 2.369em;
+.teiHeader h2,
+.teiHeader3 h2 {
+  font-size: 1.953em;
 }
 .play h3,
-.teiHeader h3 {
-  font-size: 1.777em;
+.teiHeader h3,
+.teiHeader3 h3 {
+  font-size: 1.563em;
 }
 .play h4,
-.teiHeader h4 {
-  font-size: 1.333em;
+.teiHeader h4,
+.teiHeader3 h4 {
+  font-size: 1.25em;
 }
 .margin-right {
-  margin-right: 130px;
+  margin-right: 200px;
   position: relative;
 }
 /* Styles for the off canvas table of contents */
@@ -859,18 +873,6 @@ li.current {
 .titlePage {
   margin-bottom: 1em;
 }
-.margin-note {
-  background: #F8F8FF;
-  display: block;
-  font-size: small;
-  margin-right: -130px;
-  padding: 5px;
-  position: absolute;
-  right: 0;
-  top: auto;
-  width: 120px;
-  overflow: visible;
-}
 mark,
 .mark {
   background-color: #d0dde8;
@@ -919,19 +921,46 @@ mark,
   vertical-align: middle;
   margin-right: 18px;
 }
+.margin-note {
+  background: #F8F8FF;
+  /*border: 1px solid #CACACA;*/
+  display: block;
+  font-size: small;
+  margin-right: -200px;
+  margin-bottom: 5px;
+  padding: 5px;
+  float: right;
+  clear: both;
+  /* position: absolute;*/
+  /*right: 0;*/
+  /*top: auto;*/
+  width: 190px;
+}
+.margin-note .n {
+  color: #777;
+}
+.margin-note-ref {
+  font-size: small;
+  vertical-align: super;
+  color: #777;
+  margin-right: 4px;
+}
 .pb,
 .pb2 {
-  background: #eeeeee;
-  display: block;
-  text-align: center;
+  /*background: #eeeeee;*/
+  /*display: block;*/
+  /*text-align: center;*/
   font-size: small;
-  margin-right: -130px;
-  padding: 5px;
-  position: absolute;
-  right: 0;
-  top: auto;
-  width: 120px;
-  overflow: visible;
+  float: none !important;
+  display: inline !important;
+  margin: 0 !important;
+  /*margin-right: -200px;*/
+  /*padding: 5px;*/
+  /*position: absolute;*/
+  /*right: 0;*/
+  /*top: auto;*/
+  /*width: 190px;*/
+  /*overflow: visible;*/
 }
 section {
   margin-top: 0;

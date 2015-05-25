@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<modules>
+    <!-- Special web configuration for the documentation (to handle <code>) -->
+    <output mode="web" odd="eebo">
+        <module mode="html" uri="http://existsolutions.com/apps/eebo/ext-html" prefix="ext-html" at="xmldb:exist:///db/apps/eebo/modules/ext-html.xql"/>
+    </output>
+</modules>

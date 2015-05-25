@@ -7,6 +7,7 @@ import module namespace templates="http://exist-db.org/xquery/templates" ;
 import module namespace config="http://exist-db.org/apps/appblueprint/config" at "config.xqm";
 import module namespace request="http://exist-db.org/xquery/request";
 import module namespace pmu="http://www.tei-c.org/tei-simple/xquery/util" at "/db/apps/tei-simple/content/util.xql";
+import module namespace odd="http://www.tei-c.org/tei-simple/odd2odd" at "/db/apps/tei-simple/content/odd2odd.xql";
 import module namespace kwic="http://exist-db.org/xquery/kwic" at "resource:org/exist/xquery/lib/kwic.xql";
 
 declare namespace expath="http://expath.org/ns/pkg";
@@ -167,8 +168,8 @@ declare function app:load($context as node()*, $id as xs:string) {
 };
 
 declare function app:header($node as node(), $model as map(*)) {
-    pmu:process($config:odd, $model("work")/tei:teiHeader, 
-        $config:odd-root, "web", "../resources/odd", $app:ext-html)
+    pmu:process(odd:get-compiled($config:odd-root, $config:odd, $config:compiled-odd), $model("work")/tei:teiHeader, 
+        $config:odd-root, "web", "../resources/odd", $config:pm-config)
 };
 
 (:You can always see three levels: the current level, is siblings, its parent and its children. 
@@ -333,8 +334,8 @@ declare %private function app:derive-title($div) {
                         else concat('[', $type/string(), ']')
             return $title
         case element(tei:titlePage) return
-            pmu:process($config:odd, $div, $config:odd-root, "web", 
-                "../resources/odd", $app:ext-html)
+            pmu:process(odd:get-compiled($config:odd-root, $config:odd, $config:compiled-odd), $div, $config:odd-root, "web", 
+                "../resources/odd", $config:pm-config)
         default return
             ()
 };
@@ -423,24 +424,14 @@ declare function app:work-author($node as node(), $model as map(*)) {
         string-join($work-authors, "; ")
 };
 
-declare function app:epub-link($node as node(), $model as map(*)) {
-    let $file := replace(util:document-name($model("work")), "^(.*?)\.[^\.]*$", "$1")
-    return
-        element { node-name($node) } {
-            $node/@* except $node/@href,
-            attribute href { $node/@href || $file || ".epub" },
-            $node/node()
-        }
-};
-
-declare function app:pdf-link($node as node(), $model as map(*)) {
+declare function app:download-link($node as node(), $model as map(*), $type as xs:string) {
     let $file := replace(util:document-name($model("work")), "^(.*?)\.[^\.]*$", "$1")
     let $uuid := util:uuid()
     return
         element { node-name($node) } {
             $node/@*,
             attribute data-token { $uuid },
-            attribute href { $node/@href || $file || ".pdf?token=" || $uuid || "&amp;cache=no" },
+            attribute href { $node/@href || $file || "." || $type || "?token=" || $uuid || "&amp;cache=no" },
             $node/node()
         }
 };
@@ -635,7 +626,7 @@ declare function app:lucene-view($node as node(), $model as map(*), $id as xs:st
 };
 
 declare function app:process-content($view) {
-	let $html := pmu:process($config:odd, $view, $config:odd-root, "web", "../resources/odd", $app:ext-html)
+	let $html := pmu:process(odd:get-compiled($config:odd-root, $config:odd, $config:compiled-odd), $view, $config:odd-root, "web", "../resources/odd", $config:pm-config)
     return
         <div xmlns="http://www.w3.org/1999/xhtml" class="play {if ($html//*[@class = ('margin-note', 'pb2')]) then 'margin-right' else ()}">
         {

@@ -62,10 +62,12 @@ $(document).ready(function() {
     
     var downloadCheck;
     
-    $(".pdf-link").click(function(ev) {
-        $("#pdf-info").modal({
-            show: true
-        });
+    $("#pdf-info").modal({
+        show: false
+    });
+        
+    $(".download-link").click(function(ev) {
+        $("#pdf-info").modal("show");
         var token = $(this).attr("data-token");
         downloadCheck = window.setInterval(function() {
             var cookieValue = $.macaroon("sarit.token");

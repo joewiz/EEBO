@@ -12,6 +12,7 @@ declare option output:omit-xml-declaration "no";
 import module namespace console="http://exist-db.org/xquery/console" at "java:org.exist.console.xquery.ConsoleModule";
 import module namespace process="http://exist-db.org/xquery/process" at "java:org.exist.xquery.modules.process.ProcessModule";
 import module namespace pmu="http://www.tei-c.org/tei-simple/xquery/util" at "/db/apps/tei-simple/content/util.xql";
+import module namespace odd="http://www.tei-c.org/tei-simple/odd2odd" at "/db/apps/tei-simple/content/odd2odd.xql";
 import module namespace config="http://exist-db.org/apps/appblueprint/config" at "config.xqm";
 import module namespace xslfo="http://exist-db.org/xquery/xslfo" at "java:org.exist.xquery.modules.xslfo.XSLFOModule";
 
@@ -142,7 +143,7 @@ return
                 response:stream-binary($cached, "media-type=application/pdf", $id || ".pdf")
             ) else
                 let $start := util:system-time()
-                let $fo := pmu:process($config:odd, $doc, $config:odd-root, "print", "../resources/odd", ())
+                let $fo := pmu:process(odd:get-compiled($config:odd-root, $config:odd, $config:compiled-odd), $doc, $config:odd-root, "print", "../resources/odd", ())
                 return (
                     console:log("sarit", "Generated fo for " || $name || " in " || util:system-time() - $start),
                     if ($source) then

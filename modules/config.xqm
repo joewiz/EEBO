@@ -34,7 +34,11 @@ declare variable $config:remote-download-root:= $config:remote-root || "/downloa
 
 declare variable $config:data-root := $config:app-root || "/data";
 declare variable $config:odd-root := $config:app-root || "/resources/odd";
-declare variable $config:odd := $config:odd-root || "/teisimple-eebo.odd";
+declare variable $config:compiled-odd := $config:odd-root || "/compiled";
+
+declare variable $config:odd := "eebo.odd";
+
+declare variable $config:pm-config := doc($config:app-root || "/configuration.xml")/*;
 
 declare variable $config:repo-descriptor := doc(concat($config:app-root, "/repo.xml"))/repo:meta;
 
